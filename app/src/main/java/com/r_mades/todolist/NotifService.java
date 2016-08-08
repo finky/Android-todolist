@@ -1,12 +1,11 @@
 package com.r_mades.todolist;
 
-import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
+import android.support.v7.app.NotificationCompat;
 
 import com.r_mades.todolist.data.TaskItem;
 
@@ -17,16 +16,19 @@ import com.r_mades.todolist.data.TaskItem;
  */
 
 public class NotifService extends IntentService {
+
+public static final String ID = "ID";
+public static final String DELAY = "DELAY";
+
     public NotifService() {
         super("NotifService");
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onHandleIntent(Intent intent) {
         TaskItem item  =
-                ((TodolistApp) getApplication()).getProvider().getItem(intent.getIntExtra("message", 0));
-        int      delay = intent.getIntExtra("delay", 0);
+                ((TodolistApp) getApplication()).getProvider().getItem(intent.getIntExtra(ID, 0));
+        int      delay = intent.getIntExtra(DELAY, 0);
 
         //        new NotifAsyncTask(item, delay).execute();
         try {
@@ -40,7 +42,7 @@ public class NotifService extends IntentService {
         //            Intent intent1 = new Intent(this, TodoMainFragment.class);
         //            PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        Notification builder = new Notification.Builder(this)
+        Notification builder = new NotificationCompat.Builder(this)
                 .setTicker("Задача!1")
                 .setContentTitle("Прошло " + delay + " !")
                 .setContentText(item.title)

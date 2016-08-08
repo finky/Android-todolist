@@ -1,6 +1,7 @@
 package com.r_mades.todolist.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,13 +37,17 @@ public class TodoMainFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Достаем разметку из xml-файла и создаем из нее объект view для использования
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
+        // Находим recyclerView используя его id в разметке
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        // Ставим наш адаптер для recyclerView, чтобы он мог показать нужные элементы, в конструктор отдаем слушатель нажатий на кнопку "Завершить"
         recyclerView.setAdapter(new TasksAdapter(getActivity(), new TasksAdapter.OnDoneClickListener() {
             @Override
             public void onDoneClick(TaskItem item) {
+                // Обновляем элемент
                 item.done = 1;
                 ((TodolistApp) getActivity().getApplication()).getProvider().addObject(item);
             }
@@ -94,6 +99,10 @@ public class TodoMainFragment extends Fragment implements View.OnClickListener {
         return root;
     }
 
+    /**
+     * Описываем, что происходит по клику на кнопку.
+     * @param view на какую вьюху произошел клик
+     */
     @Override
     public void onClick(View view) {
         TaskItem item = new TaskItem();
@@ -101,12 +110,12 @@ public class TodoMainFragment extends Fragment implements View.OnClickListener {
         ((TodolistApp) getActivity().getApplication()).getProvider().addObject(item);
 
         int delay = findDelayInString(item.title);
-//        if (delay != -1) {
-//            Intent intent = new Intent(getActivity(), NotifService.class);
-//            intent.putExtra("message", ((TodolistApp) getActivity().getApplicationContext()).getProvider().count() - 1);
-//            intent.putExtra("delay", delay);
-//            getActivity().startService(intent);
-//        }
+        if (delay != -1) {
+            Intent intent = new Intent(getActivity(), NotifService.class);
+            intent.putExtra(NotifService.ID, ((TodolistApp) getActivity().getApplicationContext()).getProvider().count());
+            intent.putExtra(NotifService.DELAY, delay);
+            getActivity().startService(intent);
+        }
 
         mNewTaskText.setText("");
     }
