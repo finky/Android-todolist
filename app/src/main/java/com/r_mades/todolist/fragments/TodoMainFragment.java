@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.r_mades.todolist.NotifService;
 import com.r_mades.todolist.R;
 import com.r_mades.todolist.TodolistApp;
 import com.r_mades.todolist.adapters.TasksAdapter;
