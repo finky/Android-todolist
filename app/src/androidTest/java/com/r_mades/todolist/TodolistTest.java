@@ -11,6 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.r_mades.todolist.data.TaskItem;
 import com.r_mades.todolist.db.DatabaseProvider;
+import com.r_mades.todolist.db.OrmLiteTasksProvider;
 import com.r_mades.todolist.db.SqliteTasksProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +30,33 @@ public class TodolistTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         DatabaseProvider<TaskItem, Integer> provider = new SqliteTasksProvider();
+        provider.init(appContext, 6);
+
+        TaskItem task = new TaskItem();
+        task.title = "My super task";
+        provider.addObject(task);
+
+        ArrayList<TaskItem> databaseItems = new ArrayList<>(provider.getAll());
+        TaskItem            lastObject    = databaseItems.get(databaseItems.size() - 1);
+        assertEquals(lastObject.title, task.title);
+
+        int lastObjectId = lastObject.id;
+        lastObject.title += " " + lastObject.id;
+        provider.addObject(lastObject);
+
+        databaseItems = new ArrayList<>(provider.getAll());
+        lastObject = databaseItems.get(databaseItems.size() - 1);
+
+        assertEquals(lastObject.id, lastObjectId);
+
+        assertTrue(provider.count() > 0);
+    }
+
+    @Test
+    public void testOrmLiteDatabase() throws Exception {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        DatabaseProvider<TaskItem, Integer> provider = new OrmLiteTasksProvider();
         provider.init(appContext, 2);
 
         TaskItem task = new TaskItem();
@@ -46,7 +74,7 @@ public class TodolistTest {
         databaseItems = new ArrayList<>(provider.getAll());
         lastObject = databaseItems.get(databaseItems.size() - 1);
 
-        assertEquals(lastObject.id, lastObjectId + 1);
+        assertEquals(lastObject.id, lastObjectId);
 
         assertTrue(provider.count() > 0);
     }

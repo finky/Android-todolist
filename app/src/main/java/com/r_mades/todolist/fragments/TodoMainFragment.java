@@ -1,7 +1,6 @@
 package com.r_mades.todolist.fragments;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -101,12 +100,12 @@ public class TodoMainFragment extends Fragment implements View.OnClickListener {
         ((TodolistApp) getActivity().getApplication()).getProvider().addObject(item);
 
         int delay = findDelayInString(item.title);
-        if (delay != -1) {
-            Intent intent = new Intent(getActivity(), NotifService.class);
-            intent.putExtra("message", ((TodolistApp) getActivity().getApplicationContext()).getProvider().count() - 1);
-            intent.putExtra("delay", delay);
-            getActivity().startService(intent);
-        }
+//        if (delay != -1) {
+//            Intent intent = new Intent(getActivity(), NotifService.class);
+//            intent.putExtra("message", ((TodolistApp) getActivity().getApplicationContext()).getProvider().count() - 1);
+//            intent.putExtra("delay", delay);
+//            getActivity().startService(intent);
+//        }
 
         mNewTaskText.setText("");
     }

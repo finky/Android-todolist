@@ -22,10 +22,10 @@ public class TodolistApp extends Application {
         super.onCreate();
 
         mProvider = new SqliteTasksProvider();
-        mProvider.init(this, 5);
+        mProvider.init(this, 6);
     }
 
-    public DatabaseProvider<TaskItem, Integer> getProvider(){
+    public DatabaseProvider<TaskItem, Integer> getProvider() {
         return mProvider;
     }
 }
