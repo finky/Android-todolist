@@ -18,7 +18,7 @@ public class OrmDatabaseHelper implements DatabaseProvider<TaskItem, Integer> {
 
     @Override
     public void init(Context context, int version) {
-            
+
     }
 
     @Override
