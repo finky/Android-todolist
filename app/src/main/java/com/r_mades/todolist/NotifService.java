@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.NotificationCompat;
 
 import com.r_mades.todolist.data.TaskItem;
+import com.r_mades.todolist.data.TaskItemRealm;
 
 /**
  * Project: Android-todolist
@@ -26,7 +27,7 @@ public static final String DELAY = "DELAY";
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        TaskItem item  =
+        TaskItemRealm item  =
                 ((TodolistApp) getApplication()).getProvider().getItem(intent.getIntExtra(ID, 0));
         int      delay = intent.getIntExtra(DELAY, 0);
 

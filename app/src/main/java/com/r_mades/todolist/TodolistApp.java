@@ -3,7 +3,9 @@ package com.r_mades.todolist;
 import android.app.Application;
 
 import com.r_mades.todolist.data.TaskItem;
+import com.r_mades.todolist.data.TaskItemRealm;
 import com.r_mades.todolist.db.DatabaseProvider;
+import com.r_mades.todolist.db.RealmTasksProvider;
 import com.r_mades.todolist.db.SqliteTasksProvider;
 
 /**
@@ -15,17 +17,17 @@ import com.r_mades.todolist.db.SqliteTasksProvider;
 
 public class TodolistApp extends Application {
 
-    private DatabaseProvider<TaskItem, Integer> mProvider;
+    private DatabaseProvider<TaskItemRealm, Integer> mProvider;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mProvider = new SqliteTasksProvider();
+        mProvider = new RealmTasksProvider();
         mProvider.init(this, 6);
     }
 
-    public DatabaseProvider<TaskItem, Integer> getProvider() {
+    public DatabaseProvider<TaskItemRealm, Integer> getProvider() {
         return mProvider;
     }
 }

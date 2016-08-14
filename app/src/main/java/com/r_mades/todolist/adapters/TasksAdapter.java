@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.r_mades.todolist.R;
 import com.r_mades.todolist.TodolistApp;
 import com.r_mades.todolist.data.TaskItem;
+import com.r_mades.todolist.data.TaskItemRealm;
 import com.r_mades.todolist.db.DatabaseProvider;
 
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ import java.util.Observer;
 public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implements Observer {
 
     private final Context                             mContext;
-    private final DatabaseProvider<TaskItem, Integer> mProvider;
+    private final DatabaseProvider<TaskItemRealm, Integer> mProvider;
     private final OnDoneClickListener                 mClickListener;
-    private       ArrayList<TaskItem>                 mData;
+    private       ArrayList<TaskItemRealm>                 mData;
 
     public TasksAdapter(Context context, OnDoneClickListener listener) {
         super();
@@ -76,7 +77,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
      * @param position нужная позиция
      * @return элемент задачи из массива данных
      */
-    private TaskItem getItem(int position) {
+    private TaskItemRealm getItem(int position) {
         return mData.get(position);
     }
 
@@ -112,7 +113,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
 
     public interface OnDoneClickListener {
 
-        public void onDoneClick(TaskItem item);
+        public void onDoneClick(TaskItemRealm item);
 
     }
 }

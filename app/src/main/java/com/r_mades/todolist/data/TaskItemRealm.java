@@ -9,8 +9,7 @@ import io.realm.annotations.Required;
 
 public class TaskItemRealm extends RealmObject {
     @PrimaryKey
-    @Required
-    public int     id = RealmAutoIncrement.getInstance().getNextIdFromModel(TaskItemRealm.class);
+    public int     id = RealmAutoIncrement.getInstance(this.getClass()).getNextIdFromModel();
     public String  title;
     public int done;
 }

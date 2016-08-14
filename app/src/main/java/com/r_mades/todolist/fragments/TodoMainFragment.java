@@ -22,6 +22,7 @@ import com.r_mades.todolist.R;
 import com.r_mades.todolist.TodolistApp;
 import com.r_mades.todolist.adapters.TasksAdapter;
 import com.r_mades.todolist.data.TaskItem;
+import com.r_mades.todolist.data.TaskItemRealm;
 
 /**
  * Info about this file here.
@@ -46,7 +47,7 @@ public class TodoMainFragment extends Fragment implements View.OnClickListener {
         // Ставим наш адаптер для recyclerView, чтобы он мог показать нужные элементы, в конструктор отдаем слушатель нажатий на кнопку "Завершить"
         recyclerView.setAdapter(new TasksAdapter(getActivity(), new TasksAdapter.OnDoneClickListener() {
             @Override
-            public void onDoneClick(TaskItem item) {
+            public void onDoneClick(TaskItemRealm item) {
                 // Обновляем элемент
                 item.done = 1;
                 ((TodolistApp) getActivity().getApplication()).getProvider().addObject(item);
@@ -105,7 +106,7 @@ public class TodoMainFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onClick(View view) {
-        TaskItem item = new TaskItem();
+        TaskItemRealm item = new TaskItemRealm();
         item.title = mNewTaskText.getText().toString();
         ((TodolistApp) getActivity().getApplication()).getProvider().addObject(item);
 

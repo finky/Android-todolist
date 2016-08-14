@@ -25,10 +25,16 @@ public class RealmTasksProvider extends Observable implements DatabaseProvider<T
     @Override
     public void addObject(final TaskItemRealm object) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealm(object);
+                realm.copyToRealmOrUpdate(object);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                setChanged();
+                notifyObservers();
             }
         });
     }
@@ -39,10 +45,16 @@ public class RealmTasksProvider extends Observable implements DatabaseProvider<T
         final RealmResults<TaskItemRealm> results = realm.where(TaskItemRealm.class)
                 .equalTo("id", id)
                 .findAll();
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 results.deleteAllFromRealm();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                setChanged();
+                notifyObservers();
             }
         });
     }
@@ -50,10 +62,16 @@ public class RealmTasksProvider extends Observable implements DatabaseProvider<T
     @Override
     public void addList(final Collection<TaskItemRealm> collection) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyFromRealm(collection);
+                realm.copyToRealmOrUpdate(collection);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                setChanged();
+                notifyObservers();
             }
         });
     }
@@ -70,15 +88,17 @@ public class RealmTasksProvider extends Observable implements DatabaseProvider<T
     @Nullable
     public TaskItemRealm getItem(Integer id) {
         Realm realm = Realm.getDefaultInstance();
-        return realm.where(TaskItemRealm.class)
+        TaskItemRealm realmItem =  realm.where(TaskItemRealm.class)
                 .equalTo("id", id)
                 .findFirst();
+        return realm.copyFromRealm(realmItem);
     }
 
     @Override
     public Collection<TaskItemRealm> getAll() {
         Realm realm = Realm.getDefaultInstance();
-        return realm.where(TaskItemRealm.class)
+        Collection<TaskItemRealm> managedRealmCollection = realm.where(TaskItemRealm.class)
                 .findAll();
+        return realm.copyFromRealm(managedRealmCollection);
     }
 }

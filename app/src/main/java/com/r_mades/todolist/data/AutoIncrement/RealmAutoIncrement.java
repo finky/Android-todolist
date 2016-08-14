@@ -18,61 +18,36 @@ import io.realm.RealmObject;
  */
 public final class RealmAutoIncrement {
 
-    private Realm realm;
     private Map<Class<? extends RealmObject>, AtomicInteger> modelMap = new HashMap<>();
     private static RealmAutoIncrement autoIncrementMap;
+    private Class<? extends RealmObject> mObj;
 
-    private RealmAutoIncrement() {
+    private RealmAutoIncrement(Class<? extends RealmObject> obj) {
+        mObj = obj;
+        modelMap.put(obj, new AtomicInteger(getLastIdFromModel(mObj)));
     }
 
-    {
-        realm = Realm.getDefaultInstance();
-        modelMap.put(TaskItemRealm.class, new AtomicInteger(getLastIdFromModel(TaskItemRealm.class)));
-    }
-
-    /**
-     * Utility method which query for all models saved and get the bigger model id saved
-     * Used to guarantee which the last model id saved is really the last
-     *
-     * @param clazz Model which should get the last id
-     * @return The last id saved from model passed
-     */
     private int getLastIdFromModel(Class<? extends RealmObject> clazz) {
 
         String primaryKeyColumnName = "id";
-        Number lastId = realm.where(clazz).max(primaryKeyColumnName);
-
+        Number lastId = Realm.getDefaultInstance().where(clazz).max(primaryKeyColumnName);
         return lastId == null ? 0 : lastId.intValue();
     }
 
-    /**
-     * Search in modelMap for the last saved id from model passed and return the next one
-     *
-     * @param clazz Model to search the last id
-     * @return The next id which can be saved in database for that model,
-     * {@code null} will be returned when this method is called by reflection
-     */
-    public Integer getNextIdFromModel(Class<? extends RealmObject> clazz) {
-
+    public Integer getNextIdFromModel() {
 
         if (isValidMethodCall()) {
 
-            AtomicInteger modelId = modelMap.get(clazz);
+            AtomicInteger modelId = modelMap.get(mObj);
 
             if (modelId == null) {
                 return 0;
             }
             return modelId.incrementAndGet();
         }
-        return null;
+        return 0;
     }
 
-    /**
-     * Utility method to validate if the method is called from reflection,
-     * in this case is considered a not valid call otherwise is a valid call
-     *
-     * @return The boolean which define if the method call is valid or not
-     */
     private boolean isValidMethodCall() {
 
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -86,12 +61,11 @@ public final class RealmAutoIncrement {
         return true;
     }
 
-    public static RealmAutoIncrement getInstance() {
+    public static RealmAutoIncrement getInstance(Class<? extends RealmObject> obj) {
 
         if (autoIncrementMap == null) {
-            autoIncrementMap = new RealmAutoIncrement();
+            autoIncrementMap = new RealmAutoIncrement(obj);
         }
-
         return autoIncrementMap;
     }
 }
