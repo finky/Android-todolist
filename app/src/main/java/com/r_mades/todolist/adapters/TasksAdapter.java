@@ -64,7 +64,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
      * @param position позиция текущего элемента
      */
     @Override
-    public void onBindViewHolder(final TasksViewHolder holder, int position) {
+
+    public void onBindViewHolder(final TasksViewHolder holder, final int position) {
         if (holder.editDone.getVisibility() == View.VISIBLE)
             showEditMode(holder, false);
         holder.title.setText(getItem(position).title);
