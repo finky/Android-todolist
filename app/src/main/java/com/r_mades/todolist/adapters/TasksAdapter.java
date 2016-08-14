@@ -30,6 +30,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
     private final DatabaseProvider<TaskItemRealm, Integer> mProvider;
     private final OnDoneClickListener                 mClickListener;
     private       ArrayList<TaskItemRealm>                 mData;
+    private ArrayList<View> mButtons;
 
     public TasksAdapter(Context context, OnDoneClickListener listener) {
         super();
@@ -79,16 +80,17 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
                 holder.editTitle.setVisibility(View.VISIBLE);
                 holder.editTitle.setText(holder.title.getText());
                 holder.editDone.setVisibility(View.VISIBLE);
+                holder.button.setClickable(false);
                 holder.editDone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         TaskItemRealm item = mData.get(position);
                         item.title = holder.editTitle.getText().toString();
                         mProvider.addObject(item);
-                        mData = new ArrayList<>(mProvider.getAll());
                         holder.editTitle.setVisibility(View.GONE);
                         holder.title.setVisibility(View.VISIBLE);
                         holder.editDone.setVisibility(View.GONE);
+                        holder.button.setClickable(true);
                     }
                 });
                 return true;
