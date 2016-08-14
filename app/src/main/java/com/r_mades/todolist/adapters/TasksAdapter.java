@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import static android.media.CamcorderProfile.get;
+
 /**
  * Адаптер для управления задачами. Достает данные из базы данных, и складывает в RecyclerView.
  * Project: ToDoList
@@ -62,12 +64,34 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
      * @param position позиция текущего элемента
      */
     @Override
-    public void onBindViewHolder(final TasksViewHolder holder, int position) {
+    public void onBindViewHolder(final TasksViewHolder holder, final int position) {
         holder.title.setText(getItem(position).title);
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mClickListener.onDoneClick(getItem(holder.getAdapterPosition()));
+            }
+        });
+        holder.title.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                holder.title.setVisibility(View.GONE);
+                holder.editTitle.setVisibility(View.VISIBLE);
+                holder.editTitle.setText(holder.title.getText());
+                holder.editDone.setVisibility(View.VISIBLE);
+                holder.editDone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TaskItemRealm item = mData.get(position);
+                        item.title = holder.editTitle.getText().toString();
+                        mProvider.addObject(item);
+                        mData = new ArrayList<>(mProvider.getAll());
+                        holder.editTitle.setVisibility(View.GONE);
+                        holder.title.setVisibility(View.VISIBLE);
+                        holder.editDone.setVisibility(View.GONE);
+                    }
+                });
+                return true;
             }
         });
     }

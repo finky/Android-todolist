@@ -2,6 +2,8 @@ package com.r_mades.todolist.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.r_mades.todolist.R;
@@ -16,6 +18,8 @@ import com.r_mades.todolist.R;
 public class TasksViewHolder extends RecyclerView.ViewHolder {
 
     TextView title;
+    EditText editTitle;
+    ImageButton editDone;
     View button;
 
     public TasksViewHolder(View itemView) {
@@ -23,5 +27,7 @@ public class TasksViewHolder extends RecyclerView.ViewHolder {
 
         title = (TextView) itemView.findViewById(R.id.title);
         button = itemView.findViewById(R.id.done);
+        editTitle = (EditText) itemView.findViewById(R.id.title_edit);
+        editDone = (ImageButton) itemView.findViewById(R.id.edit_finished);
     }
 }

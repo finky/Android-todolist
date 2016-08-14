@@ -15,6 +15,32 @@
         android:gravity="center_vertical"
         android:textSize="16sp"/>
 
+    <EditText
+        android:id="@+id/title_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/done"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/done"
+        android:layout_marginLeft="16dp"
+        android:layout_toLeftOf="@+id/edit_finished"
+        android:gravity="center_vertical"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/edit_finished"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignBottom="@+id/done"
+        android:layout_alignTop="@+id/done"
+        android:layout_marginLeft="16dp"
+        android:layout_toLeftOf="@+id/done"
+        android:gravity="center_vertical"
+        android:background="@null"
+        android:src="@android:drawable/ic_menu_edit"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/done"
         android:layout_width="wrap_content"
