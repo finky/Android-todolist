@@ -30,7 +30,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
     private final DatabaseProvider<TaskItemRealm, Integer> mProvider;
     private final OnDoneClickListener                 mClickListener;
     private       ArrayList<TaskItemRealm>                 mData;
-    private ArrayList<View> mButtons;
 
     public TasksAdapter(Context context, OnDoneClickListener listener) {
         super();
@@ -65,7 +64,9 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
      * @param position позиция текущего элемента
      */
     @Override
-    public void onBindViewHolder(final TasksViewHolder holder, final int position) {
+    public void onBindViewHolder(final TasksViewHolder holder, int position) {
+        if (holder.editDone.getVisibility() == View.VISIBLE)
+            showEditMode(holder, false);
         holder.title.setText(getItem(position).title);
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,26 +77,32 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
         holder.title.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                holder.title.setVisibility(View.GONE);
-                holder.editTitle.setVisibility(View.VISIBLE);
-                holder.editTitle.setText(holder.title.getText());
-                holder.editDone.setVisibility(View.VISIBLE);
-                holder.button.setClickable(false);
+                showEditMode(holder, true);
                 holder.editDone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        TaskItemRealm item = mData.get(position);
+                        TaskItemRealm item = mData.get(holder.getAdapterPosition());
                         item.title = holder.editTitle.getText().toString();
                         mProvider.addObject(item);
-                        holder.editTitle.setVisibility(View.GONE);
-                        holder.title.setVisibility(View.VISIBLE);
-                        holder.editDone.setVisibility(View.GONE);
-                        holder.button.setClickable(true);
+                        showEditMode(holder, false);
                     }
                 });
                 return true;
             }
         });
+    }
+
+    private void showEditMode(final TasksViewHolder holder, boolean isEditMode) {
+        if (isEditMode) {
+            holder.title.setVisibility(View.GONE);
+            holder.editTitle.setVisibility(View.VISIBLE);
+            holder.editTitle.setText(holder.title.getText());
+            holder.editDone.setVisibility(View.VISIBLE);
+        } else {
+            holder.editTitle.setVisibility(View.GONE);
+            holder.title.setVisibility(View.VISIBLE);
+            holder.editDone.setVisibility(View.GONE);
+        }
     }
 
     /**
