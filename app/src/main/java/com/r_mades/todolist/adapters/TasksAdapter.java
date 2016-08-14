@@ -99,6 +99,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
     }
 
     private void showDueDateGone(TasksViewHolder holder) {
+        holder.title.setError(null);
         Date dueDate = mData.get(holder.getAdapterPosition()).notifTime;
         if (dueDate != null)
             if (Calendar.getInstance().getTime().after(dueDate))

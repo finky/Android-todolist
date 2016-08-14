@@ -42,9 +42,10 @@ public class RealmTasksProvider extends Observable implements DatabaseProvider<T
             public void onSuccess() {
                 setChanged();
                 notifyObservers();
+                mRealm.close();
             }
         });
-        mRealm.close();
+
     }
 
     @Override
@@ -63,9 +64,10 @@ public class RealmTasksProvider extends Observable implements DatabaseProvider<T
             public void onSuccess() {
                 setChanged();
                 notifyObservers();
+                mRealm.close();
             }
         });
-        mRealm.close();
+
     }
 
     @Override
@@ -81,9 +83,9 @@ public class RealmTasksProvider extends Observable implements DatabaseProvider<T
             public void onSuccess() {
                 setChanged();
                 notifyObservers();
+                mRealm.close();
             }
         });
-        mRealm.close();
     }
 
     @Override
