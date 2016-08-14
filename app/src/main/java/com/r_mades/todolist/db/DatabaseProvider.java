@@ -29,4 +29,5 @@ public interface DatabaseProvider<ITEM_TYPE, ID_TYPE>{
     public Collection<ITEM_TYPE> getAll();
 
     public void addObserver(Observer observer);
+
 }

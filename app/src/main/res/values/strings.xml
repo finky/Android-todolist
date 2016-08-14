@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ToDoList</string>
     <string name="done">Завершить</string>
+    <string name="due_date_gone">Просрочено!</string>
 </resources>

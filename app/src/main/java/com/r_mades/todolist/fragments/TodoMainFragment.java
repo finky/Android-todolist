@@ -1,5 +1,6 @@
 package com.r_mades.todolist.fragments;
 
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +16,9 @@ import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.r_mades.todolist.NotifService;
 import com.r_mades.todolist.R;
@@ -23,6 +26,16 @@ import com.r_mades.todolist.TodolistApp;
 import com.r_mades.todolist.adapters.TasksAdapter;
 import com.r_mades.todolist.data.TaskItem;
 import com.r_mades.todolist.data.TaskItemRealm;
+
+import java.util.Calendar;
+import android.app.DatePickerDialog.OnDateSetListener;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import io.realm.Realm;
+
+import static android.R.attr.delay;
 
 /**
  * Info about this file here.
@@ -34,6 +47,8 @@ import com.r_mades.todolist.data.TaskItemRealm;
 public class TodoMainFragment extends Fragment implements View.OnClickListener {
 
     EditText mNewTaskText;
+
+    private TaskItemRealm mTaskItem = new TaskItemRealm();
 
     @Nullable
     @Override
@@ -97,6 +112,9 @@ public class TodoMainFragment extends Fragment implements View.OnClickListener {
 
         addButton.setOnClickListener(this);
 
+        ImageButton notifyButton = (ImageButton) root.findViewById(R.id.notify_date);
+        notifyButton.setOnClickListener(this);
+
         return root;
     }
 
@@ -106,20 +124,46 @@ public class TodoMainFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onClick(View view) {
-        TaskItemRealm item = new TaskItemRealm();
-        item.title = mNewTaskText.getText().toString();
-        ((TodolistApp) getActivity().getApplication()).getProvider().addObject(item);
+        switch (view.getId()){
+            case R.id.add_button:
+                mTaskItem.title = mNewTaskText.getText().toString();
+                ((TodolistApp) getActivity().getApplication()).getProvider().addObject(mTaskItem);
 
-        int delay = findDelayInString(item.title);
-        if (delay != -1) {
-            Intent intent = new Intent(getActivity(), NotifService.class);
-            intent.putExtra(NotifService.ID, ((TodolistApp) getActivity().getApplicationContext()).getProvider().count());
-            intent.putExtra(NotifService.DELAY, delay);
-            getActivity().startService(intent);
+                int delay = findDelayInString(mTaskItem.title);
+                if (delay != -1) {
+                    Intent intent = new Intent(getActivity(), NotifService.class);
+                    intent.putExtra(NotifService.ID, ((TodolistApp) getActivity().getApplicationContext()).getProvider().count());
+                    intent.putExtra(NotifService.DELAY, delay);
+                    getActivity().startService(intent);
+                }
+
+                mNewTaskText.setText("");
+                mTaskItem = new TaskItemRealm();
+                break;
+            case R.id.notify_date:
+                int year, month , day;
+                Calendar c = Calendar.getInstance();
+                if (mTaskItem.notifTime != null)
+                    c.setTime(mTaskItem.notifTime);
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+                new DatePickerDialog(getActivity(), myCallBack, year, month, day).show();
+                break;
         }
-
-        mNewTaskText.setText("");
     }
+
+    OnDateSetListener myCallBack = new OnDateSetListener() {
+
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            Calendar c = Calendar.getInstance();
+            c.set(year, monthOfYear, dayOfMonth);
+            mTaskItem.notifTime = c.getTime();
+        }
+    };
+
+
 
     private int findDelayInString(String text) {
         if (text.matches("(.*) (\\d*) сек (.*)?")) {
