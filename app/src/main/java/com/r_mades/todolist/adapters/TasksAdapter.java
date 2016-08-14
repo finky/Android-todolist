@@ -13,6 +13,8 @@ import com.r_mades.todolist.data.TaskItemRealm;
 import com.r_mades.todolist.db.DatabaseProvider;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -26,10 +28,10 @@ import static android.media.CamcorderProfile.get;
  */
 public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implements Observer {
 
-    private final Context                             mContext;
+    private final Context mContext;
     private final DatabaseProvider<TaskItemRealm, Integer> mProvider;
-    private final OnDoneClickListener                 mClickListener;
-    private       ArrayList<TaskItemRealm>                 mData;
+    private final OnDoneClickListener mClickListener;
+    private ArrayList<TaskItemRealm> mData;
 
     public TasksAdapter(Context context, OnDoneClickListener listener) {
         super();
@@ -48,7 +50,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
 
     /**
      * Создаем объект View для использования внутри списка. В R.layout.item_task лежит один элемент списка
-     * @param parent родительский объект, обычно RecyclerView
+     *
+     * @param parent   родительский объект, обычно RecyclerView
      * @param viewType тип текущего элемента, в данном проетк не нужен
      * @return готовую вьюху, которая используется в onBindViewHolder
      */
@@ -60,7 +63,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
 
     /**
      * заполняем холдер нужными данными для каждого элемента
-     * @param holder холдер для заполнения
+     *
+     * @param holder   холдер для заполнения
      * @param position позиция текущего элемента
      */
     @Override
@@ -93,6 +97,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
         });
     }
 
+
+
     private void showEditMode(final TasksViewHolder holder, boolean isEditMode) {
         if (isEditMode) {
             holder.title.setVisibility(View.GONE);
@@ -108,6 +114,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
 
     /**
      * Возвращаем элемент по позиции
+     *
      * @param position нужная позиция
      * @return элемент задачи из массива данных
      */
@@ -122,8 +129,9 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
 
     /**
      * Обновляем данные, когда произошли изменения
+     *
      * @param observable источник изменений
-     * @param o изменившиеся данные
+     * @param o          изменившиеся данные
      */
     @Override
     public void update(Observable observable, Object o) {
@@ -137,7 +145,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
     private void refreshData() {
         mData = new ArrayList<>(mProvider.getAll());
         for (int i = 0; i < mData.size(); i++) {
-            if (mData.get(i).done == 1){
+            if (mData.get(i).done == 1) {
                 mData.remove(i);
                 i--;
             }

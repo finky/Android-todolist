@@ -13,11 +13,14 @@
         android:layout_above="@+id/new_task"/>
 
 
-    <EditText
-        android:id="@+id/new_task"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+    <ImageButton
+        android:id="@+id/notify_date"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/add_button"
+        android:background="@null"
+        android:src="@android:drawable/ic_menu_my_calendar"/>
 
     <ImageButton
         android:id="@+id/add_button"
@@ -27,5 +30,15 @@
         android:layout_alignParentRight="true"
         android:background="@null"
         android:src="@android:drawable/ic_input_add"/>
+
+    <EditText
+        android:id="@+id/new_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/notify_date"
+        android:layout_toStartOf="@+id/notify_date"/>
 
 </RelativeLayout>

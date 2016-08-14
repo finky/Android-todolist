@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <service android:name=".NotifService"/>
+        <service android:name="com.r_mades.todolist.notificationservice.TimeService"/>
     </application>
 
 </manifest>

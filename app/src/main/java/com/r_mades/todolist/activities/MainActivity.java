@@ -3,8 +3,10 @@ package com.r_mades.todolist.activities;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.r_mades.todolist.notificationservice.TimeService;
 import com.r_mades.todolist.R;
 import com.r_mades.todolist.fragments.TodoMainFragment;
 
@@ -17,6 +19,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         startFragment(new TodoMainFragment(), false);
+
+        startService(new Intent(this, TimeService.class));
     }
 
     /**
