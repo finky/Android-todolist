@@ -73,6 +73,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
         if (holder.editDone.getVisibility() == View.VISIBLE)
             showEditMode(holder, false);
         holder.title.setText(getItem(position).title);
+        showDueDateGone(holder);
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +98,12 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksViewHolder> implemen
         });
     }
 
-
+    private void showDueDateGone(TasksViewHolder holder) {
+        Date dueDate = mData.get(holder.getAdapterPosition()).notifTime;
+        if (dueDate != null)
+            if (Calendar.getInstance().getTime().after(dueDate))
+                holder.title.setError(mContext.getString(R.string.due_date_gone));
+    }
 
     private void showEditMode(final TasksViewHolder holder, boolean isEditMode) {
         if (isEditMode) {
